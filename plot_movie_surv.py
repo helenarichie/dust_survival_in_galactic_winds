@@ -27,6 +27,7 @@ vlims_gas = (19.4, 22)
 vlims_dust = (-8.5, -4.3)
 spacing, unit = 400*1e-3, "kpc"
 tmax = 77.5e3
+dark = True
 ##################################
 
 ##################################
@@ -174,6 +175,13 @@ for i in range(ns, ne+1):
 
     n_gas = density/(0.6*MP)
 
+    mode_color = "black"
+    imname = "movie"
+    if dark:
+        plt.style.use('dark_background')
+        mode_color = "white"
+        imname = "movie_dark"
+
     # plot
     fig, ax = plt.subplots(nrows=2, ncols=2, figsize=(40,9), gridspec_kw={"width_ratios":[4, 30], 'wspace':0, 'hspace':0})
 
@@ -186,9 +194,9 @@ for i in range(ns, ne+1):
     ax[0][1].set_yticks(np.arange(0, ny*dx, spacing))
     ax[1][1].set_xticks(np.arange(0, nx*dx, spacing))
     ax[0][1].set_xticks(np.arange(0, nx*dx, spacing))
-    ax[0][0].tick_params(axis='both', which='both', direction='in', color='black', labelbottom=0, top=1, right=1, length=ticklength, width=tickwidth)
+    ax[0][0].tick_params(axis='both', which='both', direction='in', color=mode_color, labelbottom=0, top=1, right=1, length=ticklength, width=tickwidth)
     ax[0][1].tick_params(axis='both', which='both', direction='in', color='white', labelleft=0, top=1, right=1, length=ticklength, width=tickwidth)
-    ax[1][0].tick_params(axis='both', which='both', direction='in', color='black', top=1, right=1, length=ticklength, width=tickwidth)
+    ax[1][0].tick_params(axis='both', which='both', direction='in', color=mode_color, top=1, right=1, length=ticklength, width=tickwidth)
     ax[1][1].tick_params(axis='both', which='both', direction='in', color='white', labelleft=0, labelbottom=0, top=1, right=1, length=ticklength, width=tickwidth)
 
     ax[0][1].text(0.5*spacing, 0.81*dx*ylen, f'{round(t/1e3, 1)} Myr', color='white', fontsize=fontsize)
@@ -235,9 +243,9 @@ for i in range(ns, ne+1):
     new = "#d43a4f"
     ax[1][0].plot(time_i/1e3, mass_dust_i/mass_dust_init, label="total", linewidth=linewidth, c=new, zorder=0)
     ax[1][0].plot(time_output_i/1e3, mass_out_dust_i/mass_dust_init, label="exited box", linestyle="--", linewidth=linewidth-1, c=new, zorder=0)
-    ax[1][0].plot(time_i/1e3, (sputter_tot_i+sputter_tot_hot_i)/mass_dust_init, label="sputtered", c="black", linewidth=linewidth, zorder=1)
-    ax[1][0].plot(time_i/1e3, sputter_tot_i/mass_dust_init, c="black", label=r"$T>10^6$ K", linestyle="--", linewidth=linewidth-2, zorder=1)
-    ax[1][0].plot(time_i/1e3, sputter_tot_hot_i/mass_dust_init, c="black", label=r"$T\leq10^6$ K", linestyle="-.", linewidth=linewidth-2, zorder=1)
+    ax[1][0].plot(time_i/1e3, (sputter_tot_i+sputter_tot_hot_i)/mass_dust_init, label="sputtered", c=mode_color, linewidth=linewidth, zorder=1)
+    ax[1][0].plot(time_i/1e3, sputter_tot_i/mass_dust_init, c=mode_color, label=r"$T>10^6$ K", linestyle="--", linewidth=linewidth-2, zorder=1)
+    ax[1][0].plot(time_i/1e3, sputter_tot_hot_i/mass_dust_init, c=mode_color, label=r"$T\leq10^6$ K", linestyle="-.", linewidth=linewidth-2, zorder=1)
 
     ax[1][0].tick_params(labelsize=fontsize-4)
     ax[1][0].legend(loc="center left", fontsize=fontsize-15)
@@ -265,6 +273,6 @@ for i in range(ns, ne+1):
     ax[1][0].set_xlim(0, tmax/1e3)
     ax[0][0].set_xlim(0, tmax/1e3)
 
-    plt.savefig(os.path.join(pngdir, f"{i}_movie.png"), dpi=300, bbox_inches="tight")
+    plt.savefig(os.path.join(pngdir, f"{i}_{imname}.png"), dpi=300, bbox_inches="tight")
     plt.close()
 
