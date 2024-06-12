@@ -27,7 +27,7 @@ vlims_gas = (19.2, 21.9)
 vlims_dust = (-9.6, -4)
 spacing, unit = 400*1e-3, "kpc"
 tmax = 54e3
-dark = False
+dark = True
 ##################################
 
 ##################################
@@ -234,6 +234,9 @@ for i in range(ns, ne+1):
     ax[1][0].plot(time_i/1e3, sputter_tot_i/mass_dust_init, c=mode_color, linestyle="--", label=r"$T>10^6$ K", linewidth=linewidth-2, zorder=1)
     ax[1][0].plot(time_i/1e3, sputter_tot_hot_i/mass_dust_init, c=mode_color, linestyle="-.", label=r"$T\leq10^6$ K", linewidth=linewidth-2, zorder=1)
 
+    ax[0][0].legend(loc="upper left", fontsize=fontsize-15)
+    ax[1][0].legend(loc="center left", fontsize=fontsize-15)
+
     mass_cl_init = mass_cloud[0]
     mass_cloud_i = mass_cloud[time<=t]
     mass_out_cloud_i = mass_out_cloud[time_output<=t]
@@ -242,8 +245,9 @@ for i in range(ns, ne+1):
     ax[0][0].plot(time_cloud_i/1e3, mass_cloud_i/mass_cl_init, linewidth=linewidth, label="total", c="#49b4ab")
     ax[0][0].plot(time_output_i/1e3, mass_out_cloud_i/mass_cl_init, linewidth=linewidth-1, linestyle="--", label="exited box", c="#49b4ab")
 
-    ax[0][0].set_xticks(np.linspace(0, tmax/1e3, 5).round(0))
-    ax[1][0].set_xticks(np.linspace(0, tmax/1e3, 5).round(0))
+    xticks = np.array([0, 10, 20, 30, 40, 50])
+    ax[0][0].set_xticks(xticks.round(0))
+    ax[1][0].set_xticks(xticks.round(0))
     ax[0][0].set_yticks([0.0, 0.8, 1.6, 2.4, 3.2])
     ax[1][0].set_yticks(np.linspace(0.0, 1.0, 6).round(1))
     ax[1][0].set_ylabel(r"$m_{dust}/m_{dust,i}$", labelpad=10, fontsize=fontsize-2)
@@ -264,7 +268,7 @@ for i in range(ns, ne+1):
     ax.plot(time_i/1e3, (sputter_tot_i+sputter_tot_hot_i)/mass_dust_init, c=mode_color, label=r"sputtered", linewidth=linewidth, zorder=1)
     ax.plot(time_i/1e3, sputter_tot_i/mass_dust_init, c=mode_color, linestyle="--", linewidth=linewidth-2, zorder=1, label=r"$T<10^6~K$")
     ax.plot(time_i/1e3, sputter_tot_hot_i/mass_dust_init, c=mode_color, linestyle="-.", linewidth=linewidth-2, zorder=1, label=r"$T\geq10^6~K$")
-    ax.set_xticks(np.linspace(0, tmax/1e3, 5).round(0))
+    ax.set_xticks(xticks.round(0))
     ax.set_yticks(np.linspace(0.0, 1.0, 6).round(1))
     ax.set_ylabel(r"$m_{dust}/m_{dust,i}$", labelpad=10, fontsize=fontsize-2)
     ax.set_xlabel("Time [Myr]", labelpad=10, fontsize=fontsize-4)
@@ -281,7 +285,7 @@ for i in range(ns, ne+1):
     fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(9.9, 9), gridspec_kw={'wspace':0, 'hspace':0})
     ax.plot(time_cloud_i/1e3, mass_cloud_i/mass_cl_init, linewidth=linewidth, label="total", c="#49b4ab")
     ax.plot(time_output_i/1e3, mass_out_cloud_i/mass_cl_init, linewidth=linewidth-1, linestyle="--", label="exited box", c="#49b4ab")
-    ax.set_xticks(np.linspace(0, tmax/1e3, 5).round(0))
+    ax.set_xticks(xticks.round(0))
     ax.set_yticks([0.0, 0.8, 1.6, 2.4, 3.2])
     ax.set_xlabel("Time [Myr]", labelpad=10, fontsize=fontsize-4)
     ax.set_ylabel(r"$m_{cl}/m_{cl,i}$", labelpad=10, fontsize=fontsize-2)
