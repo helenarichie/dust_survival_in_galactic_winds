@@ -27,7 +27,7 @@ vlims_gas = (19.4, 22)
 vlims_dust = (-8.5, -4.3)
 spacing, unit = 400*1e-3, "kpc"
 tmax = 77.5e3
-dark = True
+dark = False
 ##################################
 
 ##################################
@@ -261,8 +261,8 @@ for i in range(ns, ne+1):
     ax[0][0].legend(loc="center left", fontsize=fontsize-15)
     ax[0][0].tick_params(labelsize=fontsize-4)
     
-    ax[0][0].set_xticks(np.linspace(0, tmax/1e3, 5).round(0))
-    ax[1][0].set_xticks(np.linspace(0, tmax/1e3, 5).round(0))
+    ax[0][0].set_xticks(np.linspace(0, 75, 6).round(0))
+    ax[1][0].set_xticks(np.linspace(0, 75, 6).round(0))
     ax[0][0].set_yticks([0.0, 0.3, 0.6, 0.9, 1.2])
     ax[1][0].set_yticks(np.linspace(0.0, 1.0, 6).round(1))
     ax[1][0].set_ylabel(r"$m_{dust}/m_{dust,i}$", labelpad=10, fontsize=fontsize-2)
@@ -276,3 +276,87 @@ for i in range(ns, ne+1):
     plt.savefig(os.path.join(pngdir, f"{i}_{imname}.png"), dpi=300, bbox_inches="tight")
     plt.close()
 
+    # Individually plot dust mass panel
+    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(9.9, 9), gridspec_kw={'wspace':0, 'hspace':0})
+    ax.plot(time_i/1e3, mass_dust_i/mass_dust_init, label="total", linewidth=linewidth, c=new, zorder=0)
+    ax.plot(time_output_i/1e3, mass_out_dust_i/mass_dust_init, linestyle="--", linewidth=linewidth-1, c=new, zorder=0, label="exited box")
+    ax.plot(time_i/1e3, (sputter_tot_i+sputter_tot_hot_i)/mass_dust_init, c=mode_color, label=r"sputtered", linewidth=linewidth, zorder=1)
+    ax.plot(time_i/1e3, sputter_tot_i/mass_dust_init, c=mode_color, linestyle="--", linewidth=linewidth-2, zorder=1, label=r"$T<10^6~K$")
+    ax.plot(time_i/1e3, sputter_tot_hot_i/mass_dust_init, c=mode_color, linestyle="-.", linewidth=linewidth-2, zorder=1, label=r"$T\geq10^6~K$")
+    ax.set_xticks(np.linspace(0, 75, 6).round(0))
+    ax.set_yticks(np.linspace(0.0, 1.0, 6).round(1))
+    ax.set_ylabel(r"$m_{dust}/m_{dust,i}$", labelpad=10, fontsize=fontsize-2)
+    ax.set_xlabel("Time [Myr]", labelpad=10, fontsize=fontsize-4)
+    ax.set_ylim(0-0.1, 1+0.1)
+    ax.set_xlim(0, tmax/1e3)
+
+    ax.legend(loc="center left", fontsize=fontsize-7)
+    ax.tick_params(axis='both', which='both', direction='in', color=mode_color, top=1, right=1, length=9, width=2, labelsize=fontsize-7)
+
+    plt.savefig(os.path.join(pngdir, f"{i}_dust_mass_{imname}.png"), dpi=300, bbox_inches="tight")
+    plt.close()
+
+    # Individually plot cloud mass panel
+    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(9.9, 9), gridspec_kw={'wspace':0, 'hspace':0})
+    ax.plot(time_cloud_i/1e3, mass_cloud_i/mass_cl_init, linewidth=linewidth, label="total", c="#49b4ab")
+    ax.plot(time_output_i/1e3, mass_out_cloud_i/mass_cl_init, linewidth=linewidth-1, linestyle="--", label="exited box", c="#49b4ab")
+    ax.set_xticks(np.linspace(0, 75, 6).round(0))
+    ax.set_yticks([0.0, 0.3, 0.6, 0.9, 1.2])
+    ax.set_xlabel("Time [Myr]", labelpad=10, fontsize=fontsize-4)
+    ax.set_ylabel(r"$m_{cl}/m_{cl,i}$", labelpad=10, fontsize=fontsize-2)
+    ax.set_xlim(0, tmax/1e3)
+    ax.set_ylim(0-0.1, 1.3)
+
+    ax.legend(loc="center left", fontsize=fontsize-7)
+    ax.tick_params(axis='both', which='both', direction='in', color=mode_color, top=1, right=1, length=9, width=2, labelsize=fontsize-7)
+
+    plt.savefig(os.path.join(pngdir, f"{i}_cloud_mass_{imname}.png"), dpi=300, bbox_inches="tight")
+    plt.close()
+
+    # Individually plot dust projection panel
+    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(35,4), gridspec_kw={'wspace':0, 'hspace':0})
+    im_g = ax.imshow(np.log10(d_dust[xs:(xs+xlen+1),ys:(ys+ylen+1)].T), origin="lower", extent=[0, xlen*dx, 0, ylen*dx], cmap=cmap_dust, vmin=vlims_dust[0], vmax=vlims_dust[1])
+    ax.set_xticks(np.arange(0, nx*dx, spacing))
+    ax.set_yticks(np.arange(0, ny*dx, spacing))
+    ax.tick_params(axis='both', which='both', direction='in', color="white", top=1, right=1, length=ticklength, width=tickwidth, labelsize=fontsize-7, labelleft=0, labelbottom=0)
+
+    ax.text(29.5*spacing, 0.77*dx*ylen, f'{round(t/1e3, 1)} Myr', color='white', fontsize=fontsize)
+    ax.hlines(0.80*dx*ylen, 0.5*spacing, 1.5*spacing, color='white', linewidth=linewidth-1)
+    ax.text(1.5*spacing+0.05, 0.77*dx*ylen, '400 pc', color='white', fontsize=fontsize)
+    ax.text(0.65*spacing, 0.13*dx*ylen, 'dust', color='white', fontsize=fontsize)
+
+    cbar_height = 0.77
+    cbar_ax = fig.add_axes([0.867, 0.11, 0.025, cbar_height])
+    cbar = fig.colorbar(im_g, cax=cbar_ax, pad=0.1)
+    cbar.set_label(r'$\mathrm{log}_{10}(\Sigma_{dust})$ [$\mathrm{g}\,\mathrm{cm}^{-2}$]', rotation=270, labelpad=50, fontsize=fontsize-4)
+    cbar.ax.tick_params(length=ticklength, width=tickwidth, color="white", labelsize=fontsize-7)
+    cbar_spacing = (vlims_dust[1] - vlims_dust[0])/8
+    cbar.set_ticks(np.linspace(vlims_dust[0]+cbar_spacing, vlims_dust[1]-cbar_spacing, 4).round(1))
+    cbar.ax.zorder = -1
+
+    plt.savefig(os.path.join(pngdir, f"{i}_dust_proj_{imname}.png"), dpi=300, bbox_inches="tight")
+    plt.close()
+
+    # Individually plot gas projection panel
+    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(35,4), gridspec_kw={'wspace':0, 'hspace':0})
+    im_g = ax.imshow(np.log10(n_gas[xs:(xs+xlen+1),ys:(ys+ylen+1)].T), origin="lower", extent=[0, xlen*dx, 0, ylen*dx], cmap=cmap_gas, vmin=vlims_gas[0], vmax=vlims_gas[1])
+    ax.set_xticks(np.arange(0, nx*dx, spacing))
+    ax.set_yticks(np.arange(0, ny*dx, spacing))
+    ax.tick_params(axis='both', which='both', direction='in', color="white", top=1, right=1, length=ticklength, width=tickwidth, labelsize=fontsize-7, labelleft=0, labelbottom=0)
+
+    ax.text(29.5*spacing, 0.77*dx*ylen, f'{round(t/1e3, 1)} Myr', color='white', fontsize=fontsize)
+    ax.hlines(0.80*dx*ylen, 0.5*spacing, 1.5*spacing, color='white', linewidth=linewidth-1)
+    ax.text(1.5*spacing+0.05, 0.77*dx*ylen, '400 pc', color='white', fontsize=fontsize)
+    ax.text(0.65*spacing, 0.13*dx*ylen, 'gas', color='white', fontsize=fontsize)
+
+    cbar_height = 0.77
+    cbar_ax = fig.add_axes([0.867, 0.11, 0.025, cbar_height])
+    cbar = fig.colorbar(im_g, cax=cbar_ax, pad=0.1)
+    cbar.set_label(r'$\mathrm{log}_{10}(N_{H, gas})$ [$\mathrm{cm}^{-2}$]', rotation=270, labelpad=50, fontsize=fontsize-4)
+    cbar.ax.tick_params(length=ticklength, width=tickwidth, color="white", labelsize=fontsize-7)
+    cbar_spacing = (vlims_gas[1] - vlims_gas[0])/8
+    cbar.set_ticks(np.linspace(vlims_gas[0]+cbar_spacing, vlims_gas[1]-cbar_spacing, 4).round(1))
+    cbar.ax.zorder = -1
+
+    plt.savefig(os.path.join(pngdir, f"{i}_gas_proj_{imname}.png"), dpi=300, bbox_inches="tight")
+    plt.close()
