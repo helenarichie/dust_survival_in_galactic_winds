@@ -6,7 +6,7 @@ import seaborn as sns
 ##################################
 date = "2024-04-09"
 ns = 0
-ne = 893
+ne = 600
 cat = True
 ##################################
 
@@ -27,7 +27,7 @@ vlims_gas = (18.2, 20.6)
 vlims_dust = (-10, -5.2)
 spacing, unit = 25*1e-3, "pc"
 tmax = 2.9e3
-dark = False
+dark = True
 ##################################
 
 ##################################
@@ -247,9 +247,10 @@ for i in range(ns, ne+1):
     
     ax[0][0].legend(loc="upper right", fontsize=fontsize-15)
     ax[1][0].legend(loc="center left", fontsize=fontsize-15)
-
-    ax[0][0].set_xticks(np.linspace(0, tmax/1e3, 5).round(1))
-    ax[1][0].set_xticks(np.linspace(0, tmax/1e3, 5).round(1))
+    
+    xticks = np.array([0.0, 0.7, 1.4, 2.1, 2.8])
+    ax[0][0].set_xticks(xticks.round(1))
+    ax[1][0].set_xticks(xticks.round(1))
     ax[0][0].set_yticks(np.linspace(0.0, 1.0, 6).round(1))
     ax[1][0].set_yticks(np.linspace(0.0, 1.0, 6).round(1))
     ax[1][0].set_ylabel(r"$m_{dust}/m_{dust,i}$", labelpad=10, fontsize=fontsize-2)
@@ -260,7 +261,7 @@ for i in range(ns, ne+1):
     ax[0][0].set_xlim(0, tmax/1e3)
     ax[1][0].set_xlim(0, tmax/1e3)
 
-    plt.savefig(os.path.join(pngdir, f"{i}_movie.png"), bbox_inches="tight", dpi=300)
+    plt.savefig(os.path.join(pngdir, f"{i}_{imname}.png"), bbox_inches="tight", dpi=300)
 
     # Individually plot dust mass panel
     fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(9.9, 9), gridspec_kw={'wspace':0, 'hspace':0})
@@ -269,7 +270,7 @@ for i in range(ns, ne+1):
     ax.plot(time_i/1e3, (sputter_tot_i+sputter_tot_hot_i)/mass_dust_init, c=mode_color, label=r"sputtered", linewidth=linewidth, zorder=1)
     ax.plot(time_i/1e3, sputter_tot_i/mass_dust_init, c=mode_color, linestyle="--", linewidth=linewidth-2, zorder=1, label=r"$T<10^6~K$")
     ax.plot(time_i/1e3, sputter_tot_hot_i/mass_dust_init, c=mode_color, linestyle="-.", linewidth=linewidth-2, zorder=1, label=r"$T\geq10^6~K$")
-    ax.set_xticks(np.linspace(0, tmax/1e3, 5).round(1))
+    ax.set_xticks(xticks.round(1))
     ax.set_yticks(np.linspace(0.0, 1.0, 6).round(1))
     ax.set_ylabel(r"$m_{dust}/m_{dust,i}$", labelpad=10, fontsize=fontsize-2)
     ax.set_xlabel("Time [Myr]", labelpad=10, fontsize=fontsize-4)
@@ -286,7 +287,7 @@ for i in range(ns, ne+1):
     fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(9.9, 9), gridspec_kw={'wspace':0, 'hspace':0})
     ax.plot(time_i/1e3, mass_cloud_i/mass_cl_init, linewidth=linewidth, label="total", c="#49b4ab")
     ax.plot(time_output_i/1e3, mass_out_cloud_i/mass_cl_init, linewidth=linewidth-1, linestyle="--", label="exited box", c="#49b4ab")
-    ax.set_xticks(np.linspace(0, tmax/1e3, 5).round(1))
+    ax.set_xticks(xticks.round(1))
     ax.set_yticks(np.linspace(0.0, 1.0, 6).round(1))
     ax.set_xlabel("Time [Myr]", labelpad=10, fontsize=fontsize-4)
     ax.set_ylabel(r"$m_{cl}/m_{cl,i}$", labelpad=10, fontsize=fontsize-2)
