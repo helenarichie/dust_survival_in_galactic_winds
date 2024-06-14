@@ -231,8 +231,8 @@ for i in range(ns, ne+1):
     ax[1][0].plot(time_i/1e3, mass_dust_i/mass_dust_init, label="total", linewidth=linewidth, c=new, zorder=0)
     ax[1][0].plot(time_output_i/1e3, mass_out_dust_i/mass_dust_init, linestyle="--", linewidth=linewidth-1, label="exited box", c=new, zorder=0)
     ax[1][0].plot(time_i/1e3, (sputter_tot_i+sputter_tot_hot_i)/mass_dust_init, c=mode_color, label=r"sputtered", linewidth=linewidth, zorder=1)
-    ax[1][0].plot(time_i/1e3, sputter_tot_i/mass_dust_init, c=mode_color, linestyle="--", label=r"$T>10^6$ K", linewidth=linewidth-2, zorder=1)
-    ax[1][0].plot(time_i/1e3, sputter_tot_hot_i/mass_dust_init, c=mode_color, linestyle="-.", label=r"$T\leq10^6$ K", linewidth=linewidth-2, zorder=1)
+    ax[1][0].plot(time_i/1e3, sputter_tot_i/mass_dust_init, c=mode_color, linestyle="--", label=r"$T<10^6$ K", linewidth=linewidth-2, zorder=1)
+    ax[1][0].plot(time_i/1e3, sputter_tot_hot_i/mass_dust_init, c=mode_color, linestyle="-.", label=r"$T\geq10^6$ K", linewidth=linewidth-2, zorder=1)
 
     ax[0][0].legend(loc="upper left", fontsize=fontsize-15)
     ax[1][0].legend(loc="center left", fontsize=fontsize-15)

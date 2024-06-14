@@ -27,7 +27,7 @@ vlims_gas = (19.4, 22)
 vlims_dust = (-8.5, -4.3)
 spacing, unit = 400*1e-3, "kpc"
 tmax = 77.5e3
-dark = True
+dark = False
 ##################################
 
 ##################################
@@ -244,8 +244,8 @@ for i in range(ns, ne+1):
     ax[1][0].plot(time_i/1e3, mass_dust_i/mass_dust_init, label="total", linewidth=linewidth, c=new, zorder=0)
     ax[1][0].plot(time_output_i/1e3, mass_out_dust_i/mass_dust_init, label="exited box", linestyle="--", linewidth=linewidth-1, c=new, zorder=0)
     ax[1][0].plot(time_i/1e3, (sputter_tot_i+sputter_tot_hot_i)/mass_dust_init, label="sputtered", c=mode_color, linewidth=linewidth, zorder=1)
-    ax[1][0].plot(time_i/1e3, sputter_tot_i/mass_dust_init, c=mode_color, label=r"$T\leq10^6$ K", linestyle="--", linewidth=linewidth-2, zorder=1)
-    ax[1][0].plot(time_i/1e3, sputter_tot_hot_i/mass_dust_init, c=mode_color, label=r"$T>10^6$ K", linestyle="-.", linewidth=linewidth-2, zorder=1)
+    ax[1][0].plot(time_i/1e3, sputter_tot_i/mass_dust_init, c=mode_color, label=r"$T<10^6$ K", linestyle="--", linewidth=linewidth-2, zorder=1)
+    ax[1][0].plot(time_i/1e3, sputter_tot_hot_i/mass_dust_init, c=mode_color, label=r"$T\geq10^6$ K", linestyle="-.", linewidth=linewidth-2, zorder=1)
 
     ax[1][0].tick_params(labelsize=fontsize-4)
     ax[1][0].legend(loc="center left", fontsize=fontsize-15)
@@ -281,8 +281,8 @@ for i in range(ns, ne+1):
     ax.plot(time_i/1e3, mass_dust_i/mass_dust_init, label="total", linewidth=linewidth, c=new, zorder=0)
     ax.plot(time_output_i/1e3, mass_out_dust_i/mass_dust_init, linestyle="--", linewidth=linewidth-1, c=new, zorder=0, label="exited box")
     ax.plot(time_i/1e3, (sputter_tot_i+sputter_tot_hot_i)/mass_dust_init, c=mode_color, label=r"sputtered", linewidth=linewidth, zorder=1)
-    ax.plot(time_i/1e3, sputter_tot_i/mass_dust_init, c=mode_color, linestyle="--", linewidth=linewidth-2, zorder=1, label=r"$T\leq10^6~K$")
-    ax.plot(time_i/1e3, sputter_tot_hot_i/mass_dust_init, c=mode_color, linestyle="-.", linewidth=linewidth-2, zorder=1, label=r"$T>10^6~K$")
+    ax.plot(time_i/1e3, sputter_tot_i/mass_dust_init, c=mode_color, linestyle="--", linewidth=linewidth-2, zorder=1, label=r"$T<10^6~K$")
+    ax.plot(time_i/1e3, sputter_tot_hot_i/mass_dust_init, c=mode_color, linestyle="-.", linewidth=linewidth-2, zorder=1, label=r"$T\geq10^6~K$")
     ax.set_xticks(np.linspace(0, 75, 6).round(0))
     ax.set_yticks(np.linspace(0.0, 1.0, 6).round(1))
     ax.set_ylabel(r"$m_{dust}/m_{dust,i}$", labelpad=10, fontsize=fontsize-2)
